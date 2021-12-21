@@ -1,6 +1,6 @@
 //|━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━|
-//| Creator : Fadhil Graphy (penata ulang)
-//| Creator: FebzGanz
+//| Creator : Fongsi
+//| Creator: Fongsi
 //| Script : reupload boleh asal tag
 //| jan numpang nama doang:v
 //|━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━|
@@ -47,7 +47,7 @@ const { exec } = require("child_process");
 const { recognize } = require("./lib/ocr");
 const { pinterest } = require("./lib/pinterest");
 const { removeBackgroundFromImageFile } = require("remove.bg");
-//require("./app");
+require("./app");
 const fs = require("fs");
 const moment = require("moment-timezone");
 const fetch = require("node-fetch");
@@ -95,6 +95,8 @@ fakereply = bot_.fakereply;
 fake = bot_.fake;
 description = bot_.description;
 
+const ffmpegInstaller = require("@ffmpeg-installer/ffmpeg");
+ffmpeg.setFfmpegPath(ffmpegInstaller.path);
 function kyun(seconds) {
   function pad(s) {
     return (s < 10 ? "0" : "") + s;
@@ -1505,9 +1507,10 @@ _*Tunggu Proses Upload Media......*_`;
                   .extendedTextMessage.contextInfo
               : msg;
             const media = await client.downloadAndSaveMediaMessage(encmedia);
+            console.log(media);
             ran = NumberRandom(".webp");
             await ffmpeg(`./${media}`)
-              .input(media)
+              .input(`./${media}`)
               .on("error", async function (err) {
                 fs.unlinkSync(media);
                 reply(await random(mess.error.stick));
