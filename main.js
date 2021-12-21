@@ -317,7 +317,7 @@ async function starts() {
       const isWelkom = isGroup ? welkom.includes(from) : false;
       const isNsfw = isGroup ? nsfw.includes(from) : false;
       const isOwner = ownerNumber.includes(sender);
-      const isBanChat = banchat.includes(from);
+      const isBanChat = chatban.includes(from);
       const isBanGroup = bangroup.includes(from);
       if (isBanChat && !isOwner) return;
       if (isBanGroup && command) return;
