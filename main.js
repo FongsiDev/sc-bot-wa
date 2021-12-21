@@ -47,7 +47,7 @@ const { exec } = require("child_process");
 const { recognize } = require("./lib/ocr");
 const { pinterest } = require("./lib/pinterest");
 const { removeBackgroundFromImageFile } = require("remove.bg");
-require("./app");
+//require("./app");
 const fs = require("fs");
 const moment = require("moment-timezone");
 const fetch = require("node-fetch");
